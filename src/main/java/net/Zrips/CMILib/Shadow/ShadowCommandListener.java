@@ -42,7 +42,7 @@ public class ShadowCommandListener implements Listener {
 		CMILib.getInstance().getServer().getPluginManager().callEvent(e);
 		if (e.isCancelled())
 		    return;
-		CMILib.getInstance().getServer().dispatchCommand(CMILib.getInstance().getServer().getConsoleSender(), e.getCommand());
+		CMILib.getInstance().getServer().dispatchCommand(player, e.getCommand());
 		break;
 	    case Player:
 		command = CMILib.getInstance().getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);

@@ -72,7 +72,7 @@ public class CTextEditorListener implements Listener {
 		plugin.getServer().getPluginManager().callEvent(e);
 		if (e.isCancelled())
 		    return;
-		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), e.getCommand());
+		plugin.getServer().dispatchCommand(player, e.getCommand());
 		break;
 	    case Player:
 		command = plugin.getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
