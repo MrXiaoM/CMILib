@@ -1,13 +1,11 @@
 package net.Zrips.CMILib.Chat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 
 import net.Zrips.CMILib.CMILib;
 import net.Zrips.CMILib.Locale.Snd;
@@ -65,26 +63,14 @@ public class CTextEditorListener implements Listener {
 	    Snd snd = new Snd(player, player);
 	    command = plugin.getLM().updateSnd(snd, command);
 
-	    switch (cmd.getType()) {
-	    case Console:
-		command = plugin.getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
-		ServerCommandEvent e = new ServerCommandEvent(plugin.getServer().getConsoleSender(), command);
-		plugin.getServer().getPluginManager().callEvent(e);
-		if (e.isCancelled())
-		    return;
-		plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), e.getCommand());
-		break;
-	    case Player:
-		command = plugin.getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
-		PlayerCommandPreprocessEvent ev = new PlayerCommandPreprocessEvent(player, "/" + command);
-		plugin.getServer().getPluginManager().callEvent(ev);
-		if (ev.isCancelled())
-		    return;
-		player.performCommand(cmd.getCmd());
-		break;
-	    default:
-		break;
-	    }
+        if (cmd.getType() == ShadowCommandType.Player) {
+            command = plugin.getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
+            PlayerCommandPreprocessEvent ev = new PlayerCommandPreprocessEvent(player, "/" + command);
+            plugin.getServer().getPluginManager().callEvent(ev);
+            if (ev.isCancelled())
+                return;
+            player.performCommand(cmd.getCmd());
+        }
 	}
     }
 

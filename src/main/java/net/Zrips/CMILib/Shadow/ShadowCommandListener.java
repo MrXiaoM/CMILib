@@ -5,12 +5,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.server.ServerCommandEvent;
 
 import net.Zrips.CMILib.CMILib;
 import net.Zrips.CMILib.Locale.Snd;
-import net.Zrips.CMILib.Logs.CMIDebug;
-import net.md_5.bungee.api.ChatColor;
 
 public class ShadowCommandListener implements Listener {
 
@@ -36,25 +33,13 @@ public class ShadowCommandListener implements Listener {
             Snd snd = new Snd(player, player);
             command = CMILib.getInstance().getLM().updateSnd(snd, command);
 
-            switch (cmd.getType()) {
-            case Console:
-                command = CMILib.getInstance().getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
-                ServerCommandEvent e = new ServerCommandEvent(CMILib.getInstance().getServer().getConsoleSender(), command);
-                CMILib.getInstance().getServer().getPluginManager().callEvent(e);
-                if (e.isCancelled())
-                    return;
-                CMILib.getInstance().getServer().dispatchCommand(CMILib.getInstance().getServer().getConsoleSender(), e.getCommand());
-                break;
-            case Player:
+            if (cmd.getType() == ShadowCommandType.Player) {
                 command = CMILib.getInstance().getPlaceholderAPIManager().translateOwnPlaceHolder(player, command);
                 PlayerCommandPreprocessEvent ev = new PlayerCommandPreprocessEvent(player, "/" + command);
                 CMILib.getInstance().getServer().getPluginManager().callEvent(ev);
                 if (ev.isCancelled())
                     return;
                 player.performCommand(cmd.getCmd());
-                break;
-            default:
-                break;
             }
         }
     }
